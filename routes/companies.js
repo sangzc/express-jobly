@@ -19,7 +19,7 @@ router.post("/", async function (req, res, next){
 
     try{
         const newCompanyData = req.body;
-        const newCompany = await Company.create(newCompanyData);
+        const company = await Company.create(newCompanyData);
         return res.json({company});
         
     } catch(err) {
@@ -44,11 +44,14 @@ router.get("/:handle", async function (req, res, next){
 router.patch("/:handle", async function (req, res, next) {
     try{
         const handle = req.params;
+        debugger
         const data = req.body;
-        const company = await Company.update({handle, ...data});
+        const company = await Company.update({...handle, ...data});
         return res.json({company});
 
     } catch(err) {
         return next(err);
     }
 });
+
+module.exports = router;

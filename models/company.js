@@ -1,6 +1,7 @@
 /** Company class for message.ly */
+const express = require("express");
 const db = require("../db");
-const partialUpdate = require("../helpers/partialUpdate");
+const sqlForPartialUpdate = require("../helpers/partialUpdate");
 /** Company of the site. */
 
 class Company {
@@ -69,10 +70,11 @@ class Company {
     const items = {name, num_employees, description, logo_url};
     const key = "handle";
     const id = handle;
+    debugger
     const { query, values } = sqlForPartialUpdate(table, items, key, id);
 
     // insert into database
-    const res = await db.query(query, values);
+    const res = await db.query(`${query}`, values);
 
     // return {companyname, hashedpassword, first_name, last_name, phone}
     return res.rows[0];
@@ -94,5 +96,6 @@ class Company {
 //     return res.rows[0];
 //   }
 // }
+}
 
 module.exports = Company;
