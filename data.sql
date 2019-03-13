@@ -7,20 +7,20 @@ logo_url TEXT
 );
 
 CREATE TABLE jobs (
-id PRIMARY KEY SERIAL,
+id SERIAL PRIMARY KEY,
 title TEXT NOT NULL,
 salary FLOAT NOT NULL,
 equity FLOAT NOT NULL CHECK (equity < 1),
-company_handle TEXT FOREIGN KEY,
+company_handle TEXT REFERENCES companies,
 date_posted DATE
 );
 
 CREATE TABLE users (
 username TEXT PRIMARY KEY,
-password NOT NULL,
+password TEXT NOT NULL,
 first_name TEXT NOT NULL,
 last_name TEXT NOT NULL,
 email TEXT,
 photo_url TEXT,
-is_admin NOT NULL BOOLEAN DEFAULT 'false'
+is_admin BOOLEAN NOT NULL DEFAULT 'false'
 );
