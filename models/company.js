@@ -1,6 +1,6 @@
 /** Company class for message.ly */
 const db = require("../db");
-
+const partialUpdate = require("../helpers/partialUpdate");
 /** Company of the site. */
 
 class Company {
@@ -27,6 +27,7 @@ class Company {
    */
   //TODO:
   static async getByHandle({handle, name, num_employees, description, logo_url}) {
+    
     // insert into database
     const res = await db.query(`
       INSERT INTO companies (handle, name, num_employees, description, logo_url)
@@ -47,29 +48,31 @@ class Company {
    * This should return JSON of {companies: [companyData, ...]}
    */
   //
-  static async getAll({handle, name, num_employees, description, logo_url}) {
-    // insert into database
-    const res = await db.query(`
-      INSERT INTO companies (handle, name, num_employees, description, logo_url)
-        VALUES ($1, $2, $3, $4, $5)
-        RETURNING handle, name, num_employees, description, logo_url`, 
-      [handle, name, num_employees, description, logo_url]);
+//   static async getAll({handle, name, num_employees, description, logo_url}) {
+//     // insert into database
+//     const res = await db.query(`
+//       INSERT INTO companies (handle, name, num_employees, description, logo_url)
+//         VALUES ($1, $2, $3, $4, $5)
+//         RETURNING handle, name, num_employees, description, logo_url`, 
+//       [handle, name, num_employees, description, logo_url]);
 
-    // return {companyname, hashedpassword, first_name, last_name, phone}
-    return res.rows[0];
-  }
+//     // return {companyname, hashedpassword, first_name, last_name, phone}
+//     return res.rows[0];
+//   }
 
   /** This will update an existing company and return the updated company.
    * This will return JSON of {company: companyData}
    */
   //TODO:
   static async update({handle, name, num_employees, description, logo_url}) {
+    const table = "companies";
+    const items = {name, num_employees, description, logo_url};
+    const key = "handle";
+    const id = handle;
+    const { query, values } = sqlForPartialUpdate(table, items, key, id);
+
     // insert into database
-    const res = await db.query(`
-      INSERT INTO companies (handle, name, num_employees, description, logo_url)
-        VALUES ($1, $2, $3, $4, $5)
-        RETURNING handle, name, num_employees, description, logo_url`, 
-      [handle, name, num_employees, description, logo_url]);
+    const res = await db.query(query, values);
 
     // return {companyname, hashedpassword, first_name, last_name, phone}
     return res.rows[0];
@@ -79,15 +82,17 @@ class Company {
    * This will return JSON of {message: "Company deleted"}
    */
   //TODO:
-  static async delete({handle, name, num_employees, description, logo_url}) {
-    // insert into database
-    const res = await db.query(`
-      INSERT INTO companies (handle, name, num_employees, description, logo_url)
-        VALUES ($1, $2, $3, $4, $5)
-        RETURNING handle, name, num_employees, description, logo_url`, 
-      [handle, name, num_employees, description, logo_url]);
+//   static async delete({handle, name, num_employees, description, logo_url}) {
+//     // insert into database
+//     const res = await db.query(`
+//       INSERT INTO companies (handle, name, num_employees, description, logo_url)
+//         VALUES ($1, $2, $3, $4, $5)
+//         RETURNING handle, name, num_employees, description, logo_url`, 
+//       [handle, name, num_employees, description, logo_url]);
 
-    // return {companyname, hashedpassword, first_name, last_name, phone}
-    return res.rows[0];
-  }
-}
+//     // return {companyname, hashedpassword, first_name, last_name, phone}
+//     return res.rows[0];
+//   }
+// }
+
+module.exports = Company;
