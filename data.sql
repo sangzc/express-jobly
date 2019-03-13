@@ -22,6 +22,5 @@ first_name TEXT NOT NULL,
 last_name TEXT NOT NULL,
 email TEXT,
 photo_url TEXT,
-is_admin NOT NULL BOOLEAN DEFAULT 'false',
-
+is_admin NOT NULL BOOLEAN DEFAULT 'false'
 );
