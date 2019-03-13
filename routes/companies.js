@@ -6,14 +6,21 @@ const router = new Router();
 router.get("/", async function (req, res, next){
     try{
 
+
     } catch(err) {
         return next(err);
     }
 })
 
-
+/**
+ * create a new company and return the newly created company.
+ * return JSON of {company: companyData} */
 router.post("/", async function (req, res, next){
+
     try{
+        const newCompanyData = req.body;
+        const newCompany = await Company.create(newCompanyData);
+        return res.json({company});
         
     } catch(err) {
         return next(err);
