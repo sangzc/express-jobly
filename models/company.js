@@ -19,7 +19,6 @@ class Company {
         RETURNING handle, name, num_employees, description, logo_url`, 
       [handle, name, num_employees, description, logo_url]);
 
-    // return {companyname, hashedpassword, first_name, last_name, phone}
     return res.rows[0];
   }
 
@@ -38,7 +37,7 @@ class Company {
     if (res.rows.length === 0) {
       throw { message: `There is no company with handle: ${handle}`, status: 404};
     }
-    // return {companyname, hashedpassword, first_name, last_name, phone}
+
     return res.rows[0];
   }
 
