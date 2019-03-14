@@ -1,3 +1,5 @@
+/** Company routes */
+
 const Router = require("express").Router;
 const Company = require("../models/company");
 
@@ -39,8 +41,8 @@ router.get("/", async function (req, res, next){
 
 
 /**
- * This should return a single company found by its id.
- * This should return JSON of {company: companyData}
+ * return a single company found by its id/handle.
+ * return JSON of {company: companyData}
  */
 router.get("/:handle", async function (req, res, next){
     try {
@@ -54,8 +56,9 @@ router.get("/:handle", async function (req, res, next){
 })
 
 /**
- * create a new company and return the newly created company.
- * return JSON of {company: companyData} */
+ * create a new company
+ * return JSON of {company: companyData} 
+ * */
 router.post("/", async function (req, res, next){
     
     const results = jsonschema.validate(req.body, companySchemaPost);
@@ -76,8 +79,8 @@ router.post("/", async function (req, res, next){
 })
 
 /**
- * This will update an existing company and return the updated company.
-    * This will return JSON of {company: companyData}
+ * update an existing company and return the updated company.
+ * return JSON of {company: companyData}
  */
 router.patch("/:handle", async function (req, res, next) {
         
@@ -107,6 +110,10 @@ router.patch("/:handle", async function (req, res, next) {
     }
 })
 
+/**
+ * remove an existing company and return a message.
+ * return JSON of {message: "Company deleted"}
+ */
 router.delete("/:handle", async function (req, res, next) {
     try{
 

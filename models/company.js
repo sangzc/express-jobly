@@ -1,14 +1,14 @@
-/** Company class for message.ly */
-const express = require("express");
+/** Company class for Jobly*/
+
 const db = require("../db");
 const sqlForPartialUpdate = require("../helpers/partialUpdate");
 const sqlGetQueries = require("../helpers/sqlGetQueries")
-/** Company of the site. */
+
 
 class Company {
 
-  /** This will create a new company and return the newly created company.
-    * This will return JSON of {company: companyData}
+  /** Create a new company and return the newly created company.
+    * return JSON of {company: companyData}
    */
 
   static async create({handle, name, num_employees, description, logo_url}) {
@@ -24,10 +24,9 @@ class Company {
   }
 
   
-  /** This will return a single company found by its id.
-   * This will return JSON of {company: companyData}
+  /** return a single company found by its id.
+   *  return JSON of {company: companyData}
    */
-  //TODO:
   static async getByHandle(handle) {
     
     // insert into database
@@ -43,10 +42,9 @@ class Company {
     return res.rows[0];
   }
 
-  /** This is a static function to help return all of the companies 
-   *  (There are a lot of conditions in here!)
+  /** help return all of the companies 
+   *  Can filter results as per conditions on the route 
   */
-  
   static async getAll({ search, min_employees, max_employees }) {
     // const table = "companies";
     // const columns = ["handle", "name"];
@@ -57,10 +55,9 @@ class Company {
     return res.rows;
   }
 
-  /** This will update an existing company and return the updated company.
-   * This will return JSON of {company: companyData}
+  /** update an existing company and return the updated company.
+   * return JSON of {company: companyData}
    */
-  //TODO:
   static async update({handle, name, num_employees, description, logo_url}) {
     const table = "companies";
     const items = {name, num_employees, description, logo_url};
@@ -78,10 +75,9 @@ class Company {
     return res.rows[0];
   }
 
-  /** This will remove an existing company and return a message.
-   * This will return JSON of {message: "Company deleted"}
+  /** remove an existing company and return a message.
+   * return JSON of {message: "Company deleted"}
    */
-  //TODO:
   static async delete(handle) {
     // delete from database
     const res = await db.query(`
