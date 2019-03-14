@@ -42,7 +42,6 @@ router.get("/", async function (req, res, next){
  * return JSON of {company: companyData} */
 router.post("/", async function (req, res, next){
     
-    console.log("we made it into the route!")
     const results = jsonschema.validate(req.body, companySchemaPost);
 
     if(!results.valid){
@@ -81,6 +80,15 @@ router.get("/:handle", async function (req, res, next){
     * This will return JSON of {company: companyData}
  */
 router.patch("/:handle", async function (req, res, next) {
+        
+    const results = jsonschema.validate(req.body, companySchemaPost);
+
+    if(!results.valid){
+      let errList = results.errors.map( err => err.stack);
+      let error = new ExpressError(errList, 400);
+      return next(error);
+    }
+    
     try{
         const validation = validate(req.body, companySchemaPatch);
         if (!validation.valid) {
