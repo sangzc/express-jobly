@@ -5,7 +5,7 @@ const Company = require("../../models/company");
 describe("Test Company class", async function () {
   beforeEach(async function () {
     await db.query("DELETE FROM companies");
-    let company = await Company.create({
+    await Company.create({
         handle: 'google', 
         name: 'Google Inc.', 
         num_employees: 100000, 
