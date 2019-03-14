@@ -93,6 +93,8 @@ class Company {
       throw { message: `There is no company with handle: ${handle}`, status: 404};
     }
 
+    return res.rows[0]
+
   };
 };
 

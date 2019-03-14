@@ -22,7 +22,33 @@ describe("Test Company class", async function () {
     expect(res.length).toBe(1);
   });
 
-  
+  test("can getByHandle", async function () {
+    let res = await Company.getByHandle("google");
+
+    expect(res.name).toBe("Google Inc.");
+    expect(res.handle).toBe("google");
+  });
+
+  test("can Update", async function () {
+    let res = await Company.update({handle: "google", name: "realgoogle", num_employees: 2, description: "just the two of us", logo_url: "https://sara.sandy.com"});
+
+    expect(res.name).toBe("realgoogle");
+    expect(res.handle).toBe("google");
+    expect(res.num_employees).toBe(2);
+    expect(res.description).toBe("just the two of us");
+    expect(res.logo_url).toBe("https://sara.sandy.com");
+  });
+
+
+  test("can delete", async function () {
+    let deleteRes = await Company.delete("google");
+    expect(deleteRes.handle).toBe("google");
+    // let getRes = await Company.getByHandle("google");
+
+    // expect(getRes.message).toBe("There is no company with handle: google");
+    // expect(getRes).toThrow("{ message: `There is no company with handle: ${handle}`, status: 404}");
+
+  });
 
 //   test("can get all companies", async function () {
 
