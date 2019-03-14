@@ -45,8 +45,7 @@ function sqlGetQueries({search, min_employees, max_employees}) {
     idx ++;
     query += ` num_employees < $${idx}`;
   }
-  // debugger
-    console.log(query);
+
     return { query, values };
   }
   

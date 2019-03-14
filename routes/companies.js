@@ -5,9 +5,9 @@ const router = new Router();
 
 const jsonschema = require("jsonschema");
 const companySchemaPost = require("../schemas/companySchemaPost.json");
-const companySchemaPatch = require("../schemas/companySchemaPost.json");
+const companySchemaPatch = require("../schemas/companySchemaPatch.json");
 
-const ExpressError = require("../express_error")
+const ExpressError = require("../express_error");
 /**
  * return the handle and name for all of the company objects. 
  * query string parameters, 
@@ -37,6 +37,22 @@ router.get("/", async function (req, res, next){
     }
 })
 
+
+/**
+ * This should return a single company found by its id.
+ * This should return JSON of {company: companyData}
+ */
+router.get("/:handle", async function (req, res, next){
+    try {
+        const handle = req.params.handle;
+        const company = await Company.getByHandle(handle);
+
+        return res.json({company});
+    } catch(err) {
+        return next(err);
+    }
+})
+
 /**
  * create a new company and return the newly created company.
  * return JSON of {company: companyData} */
@@ -60,28 +76,12 @@ router.post("/", async function (req, res, next){
 })
 
 /**
- * This should return a single company found by its id.
- * This should return JSON of {company: companyData}
- */
-router.get("/:handle", async function (req, res, next){
-    try {
-        const handle = req.params.handle;
-        const company = await Company.getByHandle(handle);
-
-        return res.json({company});
-    } catch(err) {
-        return next(err);
-    }
-})
-
-
-/**
  * This will update an existing company and return the updated company.
     * This will return JSON of {company: companyData}
  */
 router.patch("/:handle", async function (req, res, next) {
         
-    const results = jsonschema.validate(req.body, companySchemaPost);
+    const results = jsonschema.validate(req.body, companySchemaPatch);
 
     if(!results.valid){
       let errList = results.errors.map( err => err.stack);
