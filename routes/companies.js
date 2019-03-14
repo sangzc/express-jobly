@@ -3,10 +3,11 @@ const Company = require("../models/company");
 
 const router = new Router();
 
-const { validate } = require("jsonschema");
-const companySchemaPost = require("../schemas/companySchemaPost");
-const companySchemaPatch = require("../schemas/companySchemaPost");
+const jsonschema = require("jsonschema");
+const companySchemaPost = require("../schemas/companySchemaPost.json");
+const companySchemaPatch = require("../schemas/companySchemaPost.json");
 
+const ExpressError = require("../express_error")
 /**
  * return the handle and name for all of the company objects. 
  * query string parameters, 
@@ -41,14 +42,15 @@ router.get("/", async function (req, res, next){
  * return JSON of {company: companyData} */
 router.post("/", async function (req, res, next){
     
+    console.log("we made it into the route!")
+    const results = jsonschema.validate(req.body, companySchemaPost);
+
+    if(!results.valid){
+      let errList = results.errors.map( err => err.stack);
+      let error = new ExpressError(errList, 400);
+      return next(error);
+    }
     try{
-        const validation = validate(req.body, companySchemaPost);
-        if (!validation.valid) {
-            return next({
-                status: 400,
-                error: validation.errors.map(e => e.stack);
-            });
-        }
         const newCompanyData = req.body;
         const company = await Company.create(newCompanyData);
         return res.json({company});
@@ -84,7 +86,7 @@ router.patch("/:handle", async function (req, res, next) {
         if (!validation.valid) {
             return next({
                 status: 400,
-                error: validation.errors.map(e => e.stack);
+                error: validation.errors.map(e => e.stack)
             });
         }
         const handle = req.params;

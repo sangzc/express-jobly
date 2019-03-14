@@ -92,7 +92,7 @@ class Company {
     if (res.rows.length === 0) {
       throw { message: `There is no company with handle: ${handle}`, status: 404};
     }
-    
+
   };
 };
 
