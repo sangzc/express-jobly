@@ -49,6 +49,11 @@ class Company {
     // const table = "companies";
     // const columns = ["handle", "name"];
 
+    if (min_employees > max_employees){
+      throw { message: `Value for Minimun Number of employees
+       should be greater than the value for Maximun Number of employees.` }
+    }
+
     const { query, values } = sqlGetQueries({search, min_employees, max_employees});
     const res = await db.query(query, values);
       
