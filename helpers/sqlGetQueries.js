@@ -45,7 +45,8 @@ function sqlGetQueries({search, min_employees, max_employees}) {
     idx ++;
     query += ` num_employees < $${idx}`;
   }
-
+  query.replace(/\s+/g, ' ').trim();
+  
     return { query, values };
   }
   

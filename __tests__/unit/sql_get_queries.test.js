@@ -1,11 +1,26 @@
 
-const partialUpdate = require('../../helpers/partialUpdate');
+const sqlGetQueries = require('../../helpers/sqlGetQueries');
+/**
+SELECT handle, name 
+FROM companies 
+WHERE name ILIKE $1 
+AND 
+num_employees >  $2 
+AND  
+num_employees < $3
+ */
 
-describe("partialUpdate()", () => {
-  it("should generate a proper partial update query with just 1 field",
+
+describe(`test sqlGetQueries() generates a proper query, 
+depending on the number and types of arguments given`, () => {
+  it('search only',
       function () {
-      const expectedResult = {query:"UPDATE users SET first_name=$1 WHERE id=$2 RETURNING *", values: ["sandy",9999]}
-      const testResult = partialUpdate("users", {"first_name": "sandy"}, "id", 9999);
+      const expectedResult = `
+                                SELECT handle, name 
+                                FROM companies 
+                                WHERE name ILIKE $1
+                            `
+      const testResult = sqlGetQueries({"search":"g", "min_employees":100, "max_employees": 5000});
       expect(testResult).toEqual(expectedResult);
   });
 });
