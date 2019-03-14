@@ -10,6 +10,31 @@ const companySchemaPost = require("../schemas/companySchemaPost.json");
 const companySchemaPatch = require("../schemas/companySchemaPatch.json");
 
 const ExpressError = require("../express_error");
+
+/**
+ * create a new company
+ * return JSON of {company: {name, handles}} 
+ * */
+router.post("/", async function (req, res, next){
+    
+    const results = jsonschema.validate(req.body, companySchemaPost);
+
+    if(!results.valid){
+      let errList = results.errors.map( err => err.stack);
+      let error = new ExpressError(errList, 400);
+      return next(error);
+    }
+    try{
+        const newCompanyData = req.body;
+        const company = await Company.create(newCompanyData);
+        return res.json({company});
+        
+    } catch(err) {
+        return next(err);
+    };
+});
+
+
 /**
  * return the handle and name for all of the company objects. 
  * query string parameters, 
@@ -42,7 +67,7 @@ router.get("/", async function (req, res, next){
 
 /**
  * return a single company found by its id/handle.
- * return JSON of {company: companyData}
+ * return JSON of {company: {name, handles, num_employees, description, logo_url}}
  */
 router.get("/:handle", async function (req, res, next){
     try {
@@ -55,28 +80,6 @@ router.get("/:handle", async function (req, res, next){
     }
 })
 
-/**
- * create a new company
- * return JSON of {company: companyData} 
- * */
-router.post("/", async function (req, res, next){
-    
-    const results = jsonschema.validate(req.body, companySchemaPost);
-
-    if(!results.valid){
-      let errList = results.errors.map( err => err.stack);
-      let error = new ExpressError(errList, 400);
-      return next(error);
-    }
-    try{
-        const newCompanyData = req.body;
-        const company = await Company.create(newCompanyData);
-        return res.json({company});
-        
-    } catch(err) {
-        return next(err);
-    }
-})
 
 /**
  * update an existing company and return the updated company.
@@ -93,13 +96,6 @@ router.patch("/:handle", async function (req, res, next) {
     }
     
     try{
-        const validation = validate(req.body, companySchemaPatch);
-        if (!validation.valid) {
-            return next({
-                status: 400,
-                error: validation.errors.map(e => e.stack)
-            });
-        }
         const handle = req.params;
         const data = req.body;
         const company = await Company.update({...handle, ...data});

@@ -22,24 +22,6 @@ class Company {
     return res.rows[0];
   }
 
-  
-  /** return a single company found by its id.
-   *  return JSON of {company: companyData}
-   */
-  static async getByHandle(handle) {
-    
-    // insert into database
-    const res = await db.query(`
-      SELECT handle, name, num_employees, description, logo_url
-      FROM companies
-      WHERE handle = $1`, [handle])
-    
-    if (res.rows.length === 0) {
-      throw { message: `There is no company with handle: ${handle}`, status: 404};
-    }
-
-    return res.rows[0];
-  }
 
   /** help return all of the companies 
    *  Can filter results as per conditions on the route 
@@ -58,9 +40,29 @@ class Company {
       
     return res.rows;
   }
+  
+
+  /** return a single company found by its id.
+   *  return JSON of {company: companyData}
+   */
+  static async getByHandle(handle) {
+    
+    // insert into database
+    const res = await db.query(`
+      SELECT handle, name, num_employees, description, logo_url
+      FROM companies
+      WHERE handle = $1`, [handle])
+    
+    if (res.rows.length === 0) {
+      throw { message: `There is no company with handle: ${handle}`, status: 404};
+    }
+
+    return res.rows[0];
+  }
+
 
   /** update an existing company and return the updated company.
-   * return JSON of {company: companyData}
+   * return JSON of {company: {handle, name, num_employees, description, logo_url}}}
    */
   static async update({handle, name, num_employees, description, logo_url}) {
     const table = "companies";
