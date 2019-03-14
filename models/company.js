@@ -2,6 +2,7 @@
 const express = require("express");
 const db = require("../db");
 const sqlForPartialUpdate = require("../helpers/partialUpdate");
+const sqlGetQueries = require("../helpers/sqlGetQueries")
 /** Company of the site. */
 
 class Company {
@@ -49,17 +50,15 @@ class Company {
    * This should return JSON of {companies: [companyData, ...]}
    */
   //
-//   static async getAll({handle, name, num_employees, description, logo_url}) {
-//     // insert into database
-//     const res = await db.query(`
-//       INSERT INTO companies (handle, name, num_employees, description, logo_url)
-//         VALUES ($1, $2, $3, $4, $5)
-//         RETURNING handle, name, num_employees, description, logo_url`, 
-//       [handle, name, num_employees, description, logo_url]);
+  static async getAll({ search, min_employees, max_employees }) {
+    // const table = "companies";
+    // const columns = ["handle", "name"];
 
-//     // return {companyname, hashedpassword, first_name, last_name, phone}
-//     return res.rows[0];
-//   }
+    const { query, values } = sqlGetQueries({search, min_employees, max_employees});
+    const res = await db.query(query, values);
+      
+    return res.rows;
+  }
 
   /** This will update an existing company and return the updated company.
    * This will return JSON of {company: companyData}
@@ -70,13 +69,10 @@ class Company {
     const items = {name, num_employees, description, logo_url};
     const key = "handle";
     const id = handle;
-    debugger
+    
     const { query, values } = sqlForPartialUpdate(table, items, key, id);
-
     // insert into database
-    const res = await db.query(`${query}`, values);
-
-    // return {companyname, hashedpassword, first_name, last_name, phone}
+    const res = await db.query(query, values);
     return res.rows[0];
   }
 
