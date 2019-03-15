@@ -1,18 +1,28 @@
+/** sqlGetQueries holder for all queries related to generating SQL for different models */
+
+
 /**
- * return the handle and name for all of the company objects. 
- * search: 
- *  - a filtered list of handles and names 
- *  - handles should be displayed based on the search term and if the name includes it.
- * min_employees: 
- *  - companies with num_employees > min_employees.
- * max_employees:
- * - companies with num_employees < max_employees.
- * min_employees > max_employees: 400 status and a message
+ * This function will output a different query and value depending on
+ * which of the arguments (search, min_employees, max_employees) are
+ * supplied.
  * 
+ * OUTPUT FORMAT:
+ * Object: { query, values }
+ * 
+ * QUERY EXAMPLE:
+    SELECT handle, name 
+    FROM companies 
+    WHERE name ILIKE $1 
+    AND 
+    num_employees >  $2 
+    AND  
+    num_employees < $3
  *
+ * VALUES EXAMPLE:
+ * ["%g%", 100, 5000]
  */
 
-function sqlGetQueries({search, min_employees, max_employees}) {
+function sqlGetCompaniesQueries({search, min_employees, max_employees}) {
   let idx = 0;
   let values = [];
 
@@ -50,4 +60,4 @@ function sqlGetQueries({search, min_employees, max_employees}) {
     return { query, values };
   }
   
-  module.exports = sqlGetQueries;
+  module.exports = sqlGetCompaniesQueries;

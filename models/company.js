@@ -2,7 +2,7 @@
 
 const db = require("../db");
 const sqlForPartialUpdate = require("../helpers/partialUpdate");
-const sqlGetQueries = require("../helpers/sqlGetQueries")
+const sqlGetCompaniesQueries = require("../helpers/sqlGetCompaniesQueries")
 
 
 class Company {
@@ -23,19 +23,34 @@ class Company {
   }
 
 
-  /** help return all of the companies 
-   *  Can filter results as per conditions on the route 
-  */
+/**
+ * 
+ * return the handle and name for all of the company objects. 
+ * search: 
+ *  - a filtered list of handles and names 
+ *  - handles should be displayed based on the search term and if the name includes it.
+ * min_employees: 
+ *  - companies with num_employees > min_employees.
+ * max_employees:
+ * - companies with num_employees < max_employees.
+ * min_employees > max_employees: 400 status and a message
+ * 
+ *
+ */
   static async getAll({ search, min_employees, max_employees }) {
+    // sql_get_queries.js is a specialized helper for companies. 
+    // But if we want to use the helper generically, these values are necessary:
     // const table = "companies";
     // const columns = ["handle", "name"];
 
+    // This statement will be true only if min and max employees
+    // are given (not undefined). It handles comparisons of undefined with a number as false
     if (min_employees > max_employees){
       throw { message: `Value for Minimun Number of employees
        should be greater than the value for Maximun Number of employees.` }
     }
 
-    const { query, values } = sqlGetQueries({search, min_employees, max_employees});
+    const { query, values } = sqlGetCompaniesQueries({search, min_employees, max_employees});
     const res = await db.query(query, values);
       
     return res.rows;

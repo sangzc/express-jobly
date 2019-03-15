@@ -36,23 +36,15 @@ router.post("/", async function (req, res, next){
 
 
 /**
- * return the handle and name for all of the company objects. 
- * query string parameters, 
- * DISPLAY: name and handles
- 
- * search: 
- *  - a filtered list of handles and names 
- *  - handles should be displayed based on the search term and if the name includes it.
- * min_employees: 
- *  - companies with num_employees > min_employees.
- * max_employees:
- * - companies with num_employees < max_employees.
- * min_employees > max_employees: 400 status and a message
+ *
+ * OPTIONAL QUERYSTRING INPUTS:
+ *  search, min_employees, max_employees
  * 
- * RETURN JSON of 
+ * RETURN JSON of the handle and name for all of the company objects. 
  *  {companies: [companydata, ...]}   means:             
  *  {companies: [{name, handles}, ...]}
  */
+
 router.get("/", async function (req, res, next){
     try{
         const companyQuery = req.query;
@@ -67,7 +59,7 @@ router.get("/", async function (req, res, next){
 
 /**
  * return a single company found by its id/handle.
- * return JSON of {company: {name, handles, num_employees, description, logo_url}}
+ * return JSON of {company:{name, handles, num_employees, description, logo_url}}
  */
 router.get("/:handle", async function (req, res, next){
     try {
@@ -83,7 +75,7 @@ router.get("/:handle", async function (req, res, next){
 
 /**
  * update an existing company and return the updated company.
- * return JSON of {company: companyData}
+ * return JSON of {company: {name, handles, num_employees, description, logo_url}}
  */
 router.patch("/:handle", async function (req, res, next) {
         
