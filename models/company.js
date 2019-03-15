@@ -8,7 +8,7 @@ const sqlGetCompaniesQueries = require("../helpers/sqlGetCompaniesQueries")
 class Company {
 
   /** Create a new company and return the newly created company.
-    * return JSON of {company: companyData}
+    * return JSON of {company: {name, handle, num_employees, description, logo_url}}
    */
 
   static async create({handle, name, num_employees, description, logo_url}) {
@@ -58,7 +58,7 @@ class Company {
   
 
   /** return a single company found by its id.
-   *  return JSON of {company: companyData}
+   *  return JSON of {  company: {name, handle, num_employees, description, logo_url}  }
    */
   static async getByHandle(handle) {
     

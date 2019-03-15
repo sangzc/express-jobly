@@ -13,7 +13,7 @@ const ExpressError = require("../express_error");
 
 /**
  * create a new company
- * return JSON of {company: {name, handles}} 
+ * return JSON of {company: {name, handle}} 
  * */
 router.post("/", async function (req, res, next){
     
@@ -42,7 +42,7 @@ router.post("/", async function (req, res, next){
  * 
  * RETURN JSON of the handle and name for all of the company objects. 
  *  {companies: [companydata, ...]}   means:             
- *  {companies: [{name, handles}, ...]}
+ *  {companies: [{name, handle}, ...]}
  */
 
 router.get("/", async function (req, res, next){
@@ -59,7 +59,7 @@ router.get("/", async function (req, res, next){
 
 /**
  * return a single company found by its id/handle.
- * return JSON of {company:{name, handles, num_employees, description, logo_url}}
+ * return JSON of {company:{name, handle, num_employees, description, logo_url}}
  */
 router.get("/:handle", async function (req, res, next){
     try {
@@ -75,11 +75,23 @@ router.get("/:handle", async function (req, res, next){
 
 /**
  * update an existing company and return the updated company.
- * return JSON of {company: {name, handles, num_employees, description, logo_url}}
+ * return JSON of {company: {name, handle, num_employees, description, logo_url}}
  */
 router.patch("/:handle", async function (req, res, next) {
-        
+    
+    // possible refactor: jsonschema how to include custom messages per error type
+    // this is extra level added, since jsonschema will catch the following error, however, doesn't return user friendly message at the moment.
+    // handle could not be updated by frontend, hence req.body should not have handle or if req.body includes handle, it should be the same as req.params.handle.
+    if (req.body.handle !== undefined && req.body.handle !== req.params.handle) {
+        throw new Error ("To change company's handle, please contact admin.")
+    }
+    
+    // to prevent passing of any additional argument (here, handle should not be included in
+    // req.body) can set companySchemaPatch values of "additionalProperties": false 
+
     const results = jsonschema.validate(req.body, companySchemaPatch);
+
+
 
     if(!results.valid){
       let errList = results.errors.map( err => err.stack);
