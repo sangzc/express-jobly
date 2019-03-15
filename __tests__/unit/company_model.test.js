@@ -2,24 +2,42 @@ const db = require("../../db");
 const Company = require("../../models/company");
 
 
-describe("Test Company class", async function () {
+
+
+// `
+//    D Test Company Model
+//      D Creation
+//        Creation with error
+//        Creation w/o error  
+// `
+
+
+const COMPANY_1 = {
+  handle: 'google', 
+  name: 'Google Inc.', 
+  num_employees: 100000, 
+  description: 'hello we are watching you', 
+  logo_url: 'http://www.google.com/'
+};
+
+describe("Test Company class", function () {
   beforeEach(async function () {
     await db.query("DELETE FROM companies");
-    await Company.create({
-        handle: 'google', 
-        name: 'Google Inc.', 
-        num_employees: 100000, 
-        description: 'hello we are watching you', 
-        logo_url: 'http://www.google.com/'
-    });
+    await Company.create(COMPANY_1);
   });
 
   test("can Create", async function () {
+    let res = await Company.create(COMPANY_1);
+    expect(res) ;  // fixme
+  })
+  
+  test("can getAll shows created company", async function () {
     let res = await Company.getAll({"search":undefined, "min_employees":undefined, "max_employees": undefined});
 
-    expect(res[0].name).toBe("Google Inc.");
-    expect(res[0].handle).toBe("google");
-    expect(res.length).toBe(1);
+    expect(res).toEqual([{handle: COMPANY_1.handle, name: COMPANY_1.name}]);
+    // expect(res[0].name).toBe("Google Inc.");
+    // expect(res[0].handle).toBe("google");
+    // expect(res.length).toBe(1);
   });
 
   test("can getByHandle", async function () {
@@ -43,7 +61,16 @@ describe("Test Company class", async function () {
   test("can delete", async function () {
     let deleteRes = await Company.delete("google");
     expect(deleteRes.handle).toBe("google");
-    // let getRes = await Company.getByHandle("google");
+    
+    try {
+      await Company.getByHandle("google")
+      expect(false).toBe("an error should have been raised")
+    } catch (err) {
+      // expect(err.message).toEqual()
+      // great! we expect an error
+    }
+      
+    //   await Company.getByHandle("google"));
 
     // expect(getRes.message).toBe("There is no company with handle: google");
     // expect(getRes).toThrow("{ message: `There is no company with handle: ${handle}`, status: 404}");
@@ -63,8 +90,9 @@ describe("Test Company class", async function () {
 //     expect(res.companies.length).toBe(2);
 //   })
 
+});
 
-
-
-}
-);
+afterAll(async function() {
+  // close db connection
+  await db.end();
+  });

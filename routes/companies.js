@@ -95,12 +95,11 @@ router.patch("/:handle", async function (req, res, next) {
       return next(error);
     }
     
-    try{
-        const handle = req.params;
+    try {
+        const handle = req.params.handle;
         const data = req.body;
-        const company = await Company.update({...handle, ...data});
+        const company = await Company.update({...data, handle});
         return res.json({company});
-
     } catch(err) {
         return next(err);
     }
@@ -111,8 +110,7 @@ router.patch("/:handle", async function (req, res, next) {
  * return JSON of {message: "Company deleted"}
  */
 router.delete("/:handle", async function (req, res, next) {
-    try{
-
+    try {
         const handle = req.params.handle;
         await Company.delete(handle);
         return res.json({message: "Company deleted"});

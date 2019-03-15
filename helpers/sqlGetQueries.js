@@ -31,7 +31,7 @@ function sqlGetQueries({search, min_employees, max_employees}) {
       query += ' AND ';
     }
     values.push(min_employees);
-    idx ++;
+    idx++;
     query += `num_employees >  $${idx}`;
   }
   
@@ -42,10 +42,10 @@ function sqlGetQueries({search, min_employees, max_employees}) {
       query += ' AND '
     }
     values.push(max_employees);
-    idx ++;
+    idx++;
     query += ` num_employees < $${idx}`;
   }
-  query.replace(/\s+/g, ' ').trim();
+  // query.replace(/\s+/g, ' ').trim();
   
     return { query, values };
   }

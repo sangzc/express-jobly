@@ -23,8 +23,8 @@ beforeEach(async function() {
 
 /** POST /companies 
  * returns `{company: {handle, name}}` */
-describe("GET /companies/", async function() {
-    test("Gets single company", async function() {
+describe("POST /companies/", async function() {
+    test("Can add a company via POST & find it", async function() {
         const response = await request(app)
                         .post('/companies')
                         .send({
