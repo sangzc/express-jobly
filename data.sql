@@ -12,7 +12,7 @@ title TEXT NOT NULL,
 salary FLOAT NOT NULL,
 equity FLOAT NOT NULL CHECK (equity < 1),
 company_handle TEXT REFERENCES companies ON DELETE CASCADE,
-date_posted DATE
+date_posted DATE DEFAULT current_timestamp
 );
 
 CREATE TABLE users (

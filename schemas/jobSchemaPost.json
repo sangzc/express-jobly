@@ -1,8 +1,60 @@
-
-
-
-
-// TODO 
-
-// CREATE SCHEMA FOR PATCH
-
+{
+    "definitions": {},
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "http://example.com/root.json",
+    "type": "object",
+    "title": "The Root Schema",
+    "additionalProperties": false,
+    "required": [
+      "title",
+      "salary",
+      "equity"
+    ],
+    "properties": {
+      "title": {
+        "$id": "#/properties/title",
+        "type": "string",
+        "title": "The Title Schema",
+        "examples": [
+          "IBM programmer"
+        ],
+        "pattern": "^(.*)$"
+      },
+      "salary": {
+        "$id": "#/properties/salary",
+        "type": "integer",
+        "title": "The Salary Schema",
+        "default": 0,
+        "examples": [
+          100000
+        ]
+      },
+      "equity": {
+        "$id": "#/properties/equity",
+        "type": "number",
+        "title": "The Equity Schema",
+        "default": 0.0,
+        "examples": [
+          0.5
+        ]
+      },
+      "company_handle": {
+        "$id": "#/properties/company_handle",
+        "type": "string",
+        "title": "The Company_handle Schema",
+        "examples": [
+          "IBM"
+        ],
+        "pattern": "^(.*)$"
+      },
+      "date_posted": {
+        "$id": "#/properties/date_posted",
+        "type": "string",
+        "title": "The Date_posted Schema",
+        "examples": [
+          "2019-03-15"
+        ],
+        "pattern": "^(.*)$"
+      }
+    }
+  }

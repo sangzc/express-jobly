@@ -74,7 +74,7 @@ router.get("/:handle", async function (req, res, next){
 
 
 /**
- * update an existing company and return the updated company.
+ * update an existing company
  * return JSON of {company: {name, handle, num_employees, description, logo_url}}
  */
 router.patch("/:handle", async function (req, res, next) {
@@ -110,7 +110,7 @@ router.patch("/:handle", async function (req, res, next) {
 })
 
 /**
- * remove an existing company and return a message.
+ * remove an existing company
  * return JSON of {message: "Company deleted"}
  */
 router.delete("/:handle", async function (req, res, next) {
